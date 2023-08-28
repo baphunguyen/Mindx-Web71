@@ -26,6 +26,24 @@ let posts = [
     description: "Vong chung ket Rap Viet 4",
     author: "VTV",
   },
+  {
+    id: "4",
+    title: "Master ReactJS in 4 hours",
+    description: "It's free",
+    author: "Harry",
+  },
+  {
+    id: "5",
+    title: "Rap Viet mua 3",
+    description: "Vong chung ket Rap Viet 3",
+    author: "vieon",
+  },
+  {
+    id: "6",
+    title: "Rap Viet mua 4",
+    description: "Vong chung ket Rap Viet 4",
+    author: "VTV",
+  },
 ];
 
 /* 
@@ -33,6 +51,9 @@ let posts = [
     Get all posts
 **/
 app.get("/posts", (req, res) => {
+  // ?page=1&per_page=5
+  const { page, per_page } = req.query;
+
   res.json({
     data: posts,
   });
@@ -80,10 +101,41 @@ app.post("/posts", (req, res) => {
 });
 
 // API Cập nhật thông tin 1 bài post thông qua id
-app.put("/posts/:id", (req, res) => {});
+app.put("/posts/:id", (req, res) => {
+  const body = req.body;
+  const { id } = req.params;
+
+  const existingPostIndex = posts.findIndex((post) => post.id === id);
+
+  if (existingPostIndex === -1) {
+    return res.status(400).json({
+      message: "Post not found",
+    });
+  }
+
+  posts[existingPostIndex] = {
+    ...posts[existingPostIndex],
+    ...body,
+  };
+
+  return res.json({ data: posts });
+});
 
 // API xoá 1 bài post thông qua id
-app.delete("/posts/:id", (req, res) => {});
+app.delete("/posts/:id", (req, res) => {
+  const { id } = req.params;
+
+  const existingPostIndex = posts.findIndex((post) => post.id === id);
+
+  if (existingPostIndex === -1) {
+    return res.status(400).json({
+      message: "Post not found",
+    });
+  }
+
+  posts.splice(existingPostIndex, 1);
+  return res.json({ data: "Delete successfully" });
+});
 
 // http://localhost:3001
 app.listen(PORT, () => {
@@ -127,3 +179,12 @@ app.listen(PORT, () => {
 //       },
 //     ]);
 //   });
+
+/*
+    POST: http://localhost:3001/posts
+    request
+
+    req params => phương thức nào cũng có
+    req.body
+    req.query
+*/
