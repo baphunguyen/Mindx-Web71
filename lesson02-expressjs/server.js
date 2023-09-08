@@ -1,6 +1,7 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
 
+
 const app = express();
 const PORT = 3001;
 
@@ -46,10 +47,7 @@ let posts = [
   },
 ];
 
-/* 
-    Method: GET
-    Get all posts
-**/
+
 app.get("/posts", (req, res) => {
   // ?page=1&per_page=5
   const { page, per_page } = req.query;
@@ -59,9 +57,7 @@ app.get("/posts", (req, res) => {
   });
 });
 
-// Endpoint: /posts/:id
-// Get post by id
-// Method: Get
+
 app.get("/posts/:id", (req, res) => {
   // Request params
   const { id } = req.params;
@@ -77,9 +73,7 @@ app.get("/posts/:id", (req, res) => {
   res.json({ data: existingPost });
 });
 
-// Endpoint: /posts
-// Create new post
-// Method: POST
+
 app.post("/posts", (req, res) => {
   const { title, description } = req.body;
 
@@ -100,7 +94,7 @@ app.post("/posts", (req, res) => {
   });
 });
 
-// API Cập nhật thông tin 1 bài post thông qua id
+
 app.put("/posts/:id", (req, res) => {
   const body = req.body;
   const { id } = req.params;
@@ -121,7 +115,7 @@ app.put("/posts/:id", (req, res) => {
   return res.json({ data: posts });
 });
 
-// API xoá 1 bài post thông qua id
+
 app.delete("/posts/:id", (req, res) => {
   const { id } = req.params;
 
@@ -137,7 +131,7 @@ app.delete("/posts/:id", (req, res) => {
   return res.json({ data: "Delete successfully" });
 });
 
-// http://localhost:3001
+
 app.listen(PORT, () => {
   console.log(`Server is running at PORT ${PORT}`);
 });
