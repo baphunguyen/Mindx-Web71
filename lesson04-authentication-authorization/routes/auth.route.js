@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-
+import { v4 as uuidv4 } from 'uuid';
 const router = express.Router();
 
 const userMockData = [
@@ -62,6 +62,40 @@ router.post('/login', (req, res) => {
   });
 });
 
-router.post('/signup', (req, res) => {});
+router.post('/signup', (req, res) => {
+  const { email, password, fullname } = req.body;
+
+  // 1. Validation
+  if (!(email && password && fullname)) {
+    return res.status(400).json({
+      message: 'Missing required keys',
+    });
+  }
+
+  // 2. Check duplicate
+  const existingUser = userMockData.find((u) => u.email === email);
+
+  if (existingUser) {
+    return res.status(400).json({
+      message: 'Email is already taken',
+    });
+  }
+
+  // 3. Create new user
+  const newUser = {
+    email,
+    password,
+    fullname,
+    id: uuidv4(),
+  };
+
+  // 4. Add to database
+  userMockData.push(newUser);
+
+  // 5. Response to client
+  res.status(201).json({
+    message: 'User has been created successfully',
+  });
+});
 
 export default router;
