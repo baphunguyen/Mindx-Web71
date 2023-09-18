@@ -46,8 +46,23 @@ let posts = [
 
 // Get all
 router.get('/', async (req, res) => {
-  const posts = await db.posts.find().toArray();
-  res.json(posts);
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const posts = await db.posts.find().skip(skip).limit(limit).toArray();
+  const totalPost = await db.posts.countDocuments();
+  const totalPages = Math.ceil(totalPost / limit);
+
+  res.json({
+    data: posts,
+    pagination: {
+      totalItems: totalPost,
+      limit,
+      currentPage: page,
+      totalPages,
+    },
+  });
 });
 
 // Get single by id
@@ -134,3 +149,18 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
+
+/*
+  ?page=1&limit=10
+  totalItems = 26
+  limit = 10
+
+  => totalPages = 3
+    => page 1-> 1-10
+    => page 2-> 11-20
+    => page 3-> 21-26
+
+  (page - 1)*limit = 0
+  page =2 => (2 - 1)*10 = 10 => 10 -> 20
+  page =3 => (3 - 1)*10 = 20 => 20 -> 30
+*/
