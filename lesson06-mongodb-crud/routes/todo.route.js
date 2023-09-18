@@ -5,7 +5,10 @@ import { ObjectId } from 'mongodb';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {});
+router.get('/', async (req, res) => {
+  const todos = await db.todos.find().toArray();
+  return res.json(todos);
+});
 router.get('/:id', (req, res) => {});
 router.post('/', (req, res) => {});
 router.put('/:id', (req, res) => {});
