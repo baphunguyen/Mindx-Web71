@@ -1,48 +1,9 @@
 import express from 'express';
-import { v4 as uuidv4 } from 'uuid';
+
 import { db } from '../config/database.js';
 import { ObjectId } from 'mongodb';
 
 const router = express.Router();
-
-let posts = [
-  {
-    id: '1',
-    title: 'Master ReactJS in 4 hours',
-    description: "It's free",
-    author: 'Harry',
-  },
-  {
-    id: '2',
-    title: 'Rap Viet mua 3',
-    description: 'Vong chung ket Rap Viet 3',
-    author: 'vieon',
-  },
-  {
-    id: '3',
-    title: 'Rap Viet mua 4',
-    description: 'Vong chung ket Rap Viet 4',
-    author: 'VTV',
-  },
-  {
-    id: '4',
-    title: 'Master ReactJS in 4 hours',
-    description: "It's free",
-    author: 'Harry',
-  },
-  {
-    id: '5',
-    title: 'Rap Viet mua 3',
-    description: 'Vong chung ket Rap Viet 3',
-    author: 'vieon',
-  },
-  {
-    id: '6',
-    title: 'Rap Viet mua 4',
-    description: 'Vong chung ket Rap Viet 4',
-    author: 'VTV',
-  },
-];
 
 // Get all
 router.get('/', async (req, res) => {
@@ -160,7 +121,7 @@ export default router;
     => page 2-> 11-20
     => page 3-> 21-26
 
-  (page - 1)*limit = 0
-  page =2 => (2 - 1)*10 = 10 => 10 -> 20
-  page =3 => (3 - 1)*10 = 20 => 20 -> 30
+  formula = (page - 1)*limit = 0
+    page=2 => (2 - 1)*10 = 10 => 10 -> 20
+    page=3 => (3 - 1)*10 = 20 => 20 -> 30
 */
