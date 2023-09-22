@@ -3,7 +3,20 @@ import express from 'express';
 import appRouter from './routes/index.js';
 import apiLoggerMiddleware from './middlewares/apiLogger.mdw.js';
 import { connectToDatabase } from './config/database.js';
+
 import cors from 'cors';
+
+const whitelist = ['http://localhost:5173'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'PUT,PATCH,GET,DELETE,UPDATE',
+};
 
 const app = express();
 const PORT = 3001;
@@ -13,7 +26,7 @@ connectToDatabase();
 
 // 2. Define middlewares
 app.use(express.json());
-app.use(cors('*'));
+app.use(cors(corsOptions));
 app.use(apiLoggerMiddleware);
 
 // 3. Define routes
